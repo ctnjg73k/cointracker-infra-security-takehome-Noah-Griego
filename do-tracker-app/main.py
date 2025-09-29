@@ -6,12 +6,18 @@ import random
 import os
 from faker import Faker
 from fastapi.responses import HTMLResponse, Response
+from dotenv import load_dotenv
 
-DATABASE_PASSWORD = os.getenv("DATABASE_PASSWORD", "super_secret_password_123")
-DATABASE_USERNAME = os.getenv("DATABASE_USERNAME", "postgres")
-DATABASE_HOST = os.getenv("DATABASE_HOST", "postgres")
-DATABASE_NAME = os.getenv("DATABASE_NAME", "todoapp")
-API_SECRET_KEY = "sk-1234567890abcdef"
+#NJG-InfoSec: Initialize env variables
+load_dotenv()
+
+#NJG-InfoSec: Removed hardcoded secrets and stored in .env file
+#NJG-InfoSec: Removed default password values
+DATABASE_PASSWORD = os.getenv("DATABASE_PASSWORD")
+DATABASE_USERNAME = os.getenv("DATABASE_USERNAME")
+DATABASE_HOST = os.getenv("DATABASE_HOST")
+DATABASE_NAME = os.getenv("DATABASE_NAME")
+API_SECRET_KEY = os.getenv("API_SECRET_KEY")
 
 app = FastAPI(debug=True)
 
@@ -157,12 +163,11 @@ async def list_all_todos():
                     "email": todo['email']
                 } if todo['username'] else None
             })
-
+#NJG-InfoSec: Removed api-secret
         return {
             "status": "success",
             "count": len(todos_list),
-            "todos": todos_list,
-            "api_key": API_SECRET_KEY
+            "todos": todos_list
         }
 
     except Exception as e:
@@ -173,6 +178,7 @@ async def list_all_todos():
             "message": "Failed to fetch todos"
         }
 
+#NJG-InfoSec: Vulnerable to SQl injection but could not get alternate code to behave properly
 @app.get("/todo-{todo_id}")
 async def get_todo_by_id(todo_id: str):
     """Get a specific todo by ID"""
@@ -180,17 +186,17 @@ async def get_todo_by_id(todo_id: str):
         conn = await get_db_connection()
 
         query = f'''
-            SELECT t.*, u.username, u.email, u.password_hash, u.api_key, u.role
+            SELECT t.*, u.username, u.email, u.role
             FROM todos t
             LEFT JOIN users u ON t.user_id = u.id
             WHERE t.id = {todo_id}
         '''
 
-        logger.info(f"Executing query: {query}")
 
         result = await conn.fetchrow(query)
         await conn.close()
 
+#NJG-InfoSec: Removed sensitive data being exposed in response
         if result:
             return {
                 "status": "success",
@@ -208,12 +214,10 @@ async def get_todo_by_id(todo_id: str):
                     "user": {
                         "username": result['username'],
                         "email": result['email'],
-                        "password_hash": result['password_hash'],
-                        "api_key": result['api_key'],
                         "role": result['role']
                     } if result['username'] else None
                 },
-                "executed_query": query
+
             }
         else:
             return {
@@ -222,16 +226,16 @@ async def get_todo_by_id(todo_id: str):
                 "executed_query": query
             }
 
+#NJG-InfoSec: Removed sensitive data in error message
     except Exception as e:
         logger.error(f"Database error: {str(e)}")
         return {
             "status": "error",
             "error": str(e),
-            "message": "Database query failed",
-            "executed_query": query if 'query' in locals() else None,
-            "database_uri": f"postgresql://{DATABASE_USERNAME}:{DATABASE_PASSWORD}@{DATABASE_HOST}:5432/{DATABASE_NAME}"
+            "message": "Database query failed"
         }
 
+#NJG-InfoSec: Vulnerable to XSS but could not get code fix to behave as expected.
 @app.get("/demo-frame", response_class=HTMLResponse)
 async def demo_frame():
     return """
@@ -259,13 +263,16 @@ async def set_session():
       </body>
     </html>
     """
+#NJG-InfoSec: Added httponly and secure flags
     response = HTMLResponse(content=content)
     response.set_cookie(
         key="session_id",
         value="login_session_token", # assume this is a secure token we generated elsewhere (no need to fix this session token)
+        httponly=True,
+        secure=True
     )
     return response
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="127.0.0.1", port=8000)
