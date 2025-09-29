@@ -1,0 +1,69 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "8000:8000"
+      - "22:22"
+      - "9000:9000"
+    environment:
+      - DATABASE_PASSWORD=super_secret_password_123
+      - DATABASE_USERNAME=postgres
+      - DATABASE_HOST=postgres
+      - DATABASE_NAME=todoapp
+      - DEBUG=True
+    volumes:
+      - /:/host_root:rw
+      - /var/run/docker.sock:/var/run/docker.sock:rw
+      - /etc/passwd:/etc/passwd:ro
+      - .:/app:rw
+    privileged: true
+    user: root
+    cap_add:
+      - ALL
+    security_opt:
+      - seccomp:unconfined
+      - apparmor:unconfined
+    depends_on:
+      - postgres
+      - redis
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+          cpus: '2'
+
+  postgres:
+    image: postgres:9.6
+    container_name: postgres
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=super_secret_password_123
+      - POSTGRES_DB=todoapp
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    user: root
+    command: postgres -c 'log_statement=all' -c 'log_destination=stderr' -c 'log_connections=on' -c 'log_disconnections=on'
+
+  redis:
+    image: redis:5.0
+    ports:
+      - "6379:6379"
+    command: redis-server --requirepass "" --protected-mode no --bind 0.0.0.0
+    volumes:
+      - redis_data:/data
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+
+networks:
+  default:
+    driver: bridge
+    driver_opts:
+      com.docker.network.enable_ipv6: "false"
