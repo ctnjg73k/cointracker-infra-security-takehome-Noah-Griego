@@ -1,50 +1,49 @@
-# security-take-home-assignment
+# Do-Tracker App
 
 ## What is in the project
-- Kubernetes Cluster
-- Database
-- FastAPI Todo application
+- Docker Files
+- Postgres & Redis Database
+- FastAPI 'Do-Tracker' Application
 
-## What should be done
-- [ ] Fix security vulnerabilities in the code
+## Set Environment Variables
+1. Before running the app, create a .env file in the project root directory
+2. Create (or use existing) gitignore file and add the .env file to it
+3. Doing this will keep secrets out of code and prevent the .env file from being committed to your Git Repo
 
-## How to run
+For a sample .env file for the Do-Tracker app, see the .env.example file in this Git Repo.
 
-### Running the app
-```bash
-cd hello-world-app
+## Running the App
+``` bash
+cd do-tracker-app
 docker compose up
 ```
 
 
-### Infrastructure Setup
+## Access the App
+1. Open a browser of your choosing
+2. In the url bar, type:
+```127.0.0.1:8000/```
+
+
+## Populate Server with Sample Data
+1. Open a browser of your choosing
+2. In the url bar, type:
+```127.0.0.1:8000/init```
+
+
+## Find a specific 'To-Do'
+1. Open a browser of your choosing
+2. In the url bar type:
+```127.0.0.1:8000/todo-5``` (up to 50)
+
+
+## Shut Down the App and Servers
+``` bash
+docker compose down
 ```
-make kubernetes.init
-make kubernetes.plan
-make kubernetes.apply
-make database.init
-make database.plan
-make database.apply
-```
 
-### Running Tests with Docker Compose
-
-To run the application tests using Docker Compose:
-
-1. **Start the required services** (PostgreSQL and Redis):
-   ```bash
-   cd hello-world-app
-   docker compose up -d postgres redis
-   ```
-
-2. **Run the tests**:
-   ```bash
-   docker compose run --rm app sh -c "PYTHONPATH=. pytest test_suite.py -v"
-   ```
-
-3. **Clean up** (optional):
-   ```bash
-   docker compose down
-   ```
+# Helpful Tools
+- Docker Desktop
+- PyCharm (Community or Pro)
 
 **Note**: The tests require Python 3.13+ and updated dependencies. The Docker setup automatically handles the correct Python version and dependency installation.
