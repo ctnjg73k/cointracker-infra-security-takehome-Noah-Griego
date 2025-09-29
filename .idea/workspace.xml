@@ -4,12 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fc26293a-6f6d-4a1c-b89a-d5431f22cb4c" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/Do-Tracker.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Do-Tracker.iml" afterDir="false" />
+    <list default="true" id="fc26293a-6f6d-4a1c-b89a-d5431f22cb4c" name="Changes" comment="Commit 2: App Updates">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/do-tracker-app/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/do-tracker-app/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/do-tracker-app/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/do-tracker-app/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/do-tracker-app/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/do-tracker-app/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/do-tracker-app/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/do-tracker-app/docker-compose.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -90,8 +88,17 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1759125389367</updated>
-      <workItem from="1759125390535" duration="5058000" />
+      <workItem from="1759125390535" duration="8724000" />
     </task>
+    <task id="LOCAL-00001" summary="Commit 2: App Updates">
+      <option name="closed" value="true" />
+      <created>1759130497630</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1759130497630</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -107,5 +114,9 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Commit 2: App Updates" />
+    <option name="LAST_COMMIT_MESSAGE" value="Commit 2: App Updates" />
   </component>
 </project>

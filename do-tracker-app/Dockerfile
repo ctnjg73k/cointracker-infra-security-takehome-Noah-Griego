@@ -2,13 +2,10 @@ FROM python:3.13-slim
 
 WORKDIR /app
 
+#NJG-InfoSec: Removed unecessary libs
 RUN apt-get update && apt-get install -y \
     curl \
     wget \
-    vim \
-    sudo \
-    net-tools \
-    telnet \
     gcc \
     python3-dev \
     libpq-dev \

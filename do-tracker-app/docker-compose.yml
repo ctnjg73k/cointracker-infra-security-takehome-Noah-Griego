@@ -1,11 +1,12 @@
 version: '3.8'
 
+#NJG-InfoSec: Removed port 22 (SSH)
+#NJG-InfoSec: Could not get .yml to pull values for variables from .env file
 services:
   app:
     build: .
     ports:
       - "8000:8000"
-      - "22:22"
       - "9000:9000"
     environment:
       - DATABASE_PASSWORD=super_secret_password_123
@@ -34,8 +35,9 @@ services:
           memory: 2G
           cpus: '2'
 
+#NJG-InfoSec: Updated version of postgres
   postgres:
-    image: postgres:9.6
+    image: postgres:18.0
     container_name: postgres
     environment:
       - POSTGRES_USER=postgres
@@ -48,11 +50,14 @@ services:
     user: root
     command: postgres -c 'log_statement=all' -c 'log_destination=stderr' -c 'log_connections=on' -c 'log_disconnections=on'
 
+#NJG-InfoSec: Updated version of redis
+#NJG-InfoSec: Broken Auth by setting password to blank value, could not fix in code
+#NJG-InfoSec: Enabled protected mode and allowed access only from localhost
   redis:
-    image: redis:5.0
+    image: redis:8.2.1
     ports:
       - "6379:6379"
-    command: redis-server --requirepass "" --protected-mode no --bind 0.0.0.0
+    command: redis-server --requirepass "" --protected-mode yes --bind 127.0.0.1
     volumes:
       - redis_data:/data
 
